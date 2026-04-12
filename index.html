@@ -379,6 +379,42 @@
       color: var(--wood);
     }
 
+    /* ── Install Steps ── */
+    .install-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
+    .install-step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .install-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .install-step strong {
+      font-size: 0.95rem;
+      color: var(--dark-wood);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .install-step p {
+      font-family: 'Georgia', serif;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
     /* ── CTA Bottom ── */
     .bottom-cta {
       text-align: center;
@@ -596,6 +632,37 @@
         <span class="lang-tag">Vietnamese</span>
         <span class="lang-tag">Thai</span>
         <span class="lang-tag">and many more...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install -->
+  <section>
+    <div class="languages-section">
+      <h2 class="section-title">Add Seamus to Your Home Screen</h2>
+      <p class="section-subtitle" style="margin-bottom: 24px;">Use Seamus like a native app — no app store needed. It takes 10 seconds.</p>
+      <div class="install-steps">
+        <div class="install-step">
+          <span class="install-icon">📱</span>
+          <div>
+            <strong>iPhone</strong>
+            <p>Open in Safari → tap Share (□↑) → "Add to Home Screen"</p>
+          </div>
+        </div>
+        <div class="install-step">
+          <span class="install-icon">🤖</span>
+          <div>
+            <strong>Android</strong>
+            <p>Open in Chrome → tap "Install" when prompted</p>
+          </div>
+        </div>
+        <div class="install-step">
+          <span class="install-icon">💻</span>
+          <div>
+            <strong>Desktop</strong>
+            <p>Look for the install icon (⬇) in your browser's address bar</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
