@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seamus — Your AI Kitchen Companion</title>
+  <meta name="description" content="Meet Seamus, your personal AI chef. Get real-time cooking guidance, recipes, meal planning, and culinary education — all by voice, in 30+ languages.">
+  <meta name="theme-color" content="#3E2C20">
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Seamus — Your AI Kitchen Companion">
+  <meta property="og:description" content="Talk to an Irish chef who helps you cook, plan meals, and learn new techniques. Works in 30+ languages.">
+  <meta property="og:image" content="logo.png">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Eagle+Lake&family=Quicksand:wght@400;500;600;700&family=Georgia&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #FAF6F1;
+      --cream: #FFFDF9;
+      --dark-wood: #3E2C20;
+      --wood: #6B4F3A;
+      --copper: #B87333;
+      --gold: #c89d4a;
+      --stone: #8B8178;
+      --muted: #8A7A68;
+      --border: #E8E0D5;
+      --linen: #F0EBE3;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      color: var(--dark-wood);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px 40px;
+      background: linear-gradient(180deg, #3E2C20 0%, #5C3D2E 40%, #6B4F3A 70%, var(--bg) 100%);
+      position: relative;
+    }
+
+    .hero-logo {
+      width: 140px;
+      height: 140px;
+      border-radius: 28px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-family: 'Eagle Lake', cursive;
+      font-size: 3.2rem;
+      color: #F0EBE3;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: rgba(240, 230, 211, 0.75);
+      font-weight: 500;
+      margin-bottom: 32px;
+      max-width: 460px;
+    }
+
+    .hero-tagline {
+      font-family: 'Georgia', serif;
+      font-size: 1rem;
+      color: rgba(240, 230, 211, 0.55);
+      font-style: italic;
+      margin-bottom: 36px;
+      max-width: 380px;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      background: linear-gradient(135deg, var(--copper), var(--gold));
+      color: #fff;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(184, 115, 51, 0.35);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(184, 115, 51, 0.45);
+    }
+
+    .cta-secondary {
+      display: inline-block;
+      margin-top: 16px;
+      color: rgba(240, 230, 211, 0.6);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .cta-secondary:hover { color: rgba(240, 230, 211, 0.9); }
+
+    /* ── Section base ── */
+    section {
+      padding: 80px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Eagle Lake', cursive;
+      font-size: 1.8rem;
+      color: var(--dark-wood);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 48px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Features ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 28px 24px;
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(62, 44, 32, 0.08);
+    }
+
+    .feature-emoji {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-title {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dark-wood);
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-family: 'Georgia', serif;
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── How It Works ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--copper);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .step-text h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark-wood);
+      margin-bottom: 4px;
+    }
+
+    .step-text p {
+      font-family: 'Georgia', serif;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── Pricing ── */
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .price-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      text-align: center;
+      position: relative;
+    }
+
+    .price-card.featured {
+      border-color: var(--copper);
+      box-shadow: 0 8px 32px rgba(184, 115, 51, 0.15);
+    }
+
+    .price-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--copper);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .price-name {
+      font-family: 'Eagle Lake', cursive;
+      font-size: 1.3rem;
+      color: var(--dark-wood);
+      margin-bottom: 8px;
+    }
+
+    .price-amount {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--dark-wood);
+      margin-bottom: 4px;
+    }
+
+    .price-amount span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .price-period {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .price-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .price-features li {
+      padding: 6px 0;
+      font-size: 0.9rem;
+      color: var(--wood);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .price-features li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--copper);
+      flex-shrink: 0;
+    }
+
+    .price-cta {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .price-cta-free {
+      background: var(--linen);
+      color: var(--wood);
+      border: 1px solid var(--border);
+    }
+
+    .price-cta-free:hover { background: var(--border); }
+
+    .price-cta-premium {
+      background: linear-gradient(135deg, var(--copper), var(--gold));
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(184, 115, 51, 0.25);
+    }
+
+    .price-cta-premium:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(184, 115, 51, 0.35);
+    }
+
+    /* ── Languages ── */
+    .languages-section {
+      background: var(--linen);
+      border-radius: 20px;
+      padding: 48px 32px;
+      text-align: center;
+      margin: 0 auto;
+      max-width: 640px;
+    }
+
+    .lang-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .lang-tag {
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--wood);
+    }
+
+    /* ── CTA Bottom ── */
+    .bottom-cta {
+      text-align: center;
+      padding: 80px 24px;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--linen) 100%);
+    }
+
+    .bottom-cta .section-title {
+      margin-bottom: 16px;
+    }
+
+    .bottom-cta p {
+      color: var(--muted);
+      margin-bottom: 32px;
+      font-size: 1rem;
+    }
+
+    .store-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: var(--dark-wood);
+      color: var(--linen);
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .store-btn:hover {
+      background: #2a1c14;
+      transform: translateY(-1px);
+    }
+
+    .store-btn-icon { font-size: 1.4rem; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--stone);
+      font-size: 0.8rem;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      margin: 0 12px;
+    }
+
+    footer a:hover { color: var(--copper); }
+
+    .footer-company {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: var(--stone);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .hero-title { font-size: 2.4rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .hero-logo { width: 110px; height: 110px; }
+      section { padding: 60px 20px; }
+      .section-title { font-size: 1.5rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .pricing-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <div class="hero">
+    <img src="logo.png" alt="Seamus" class="hero-logo">
+    <h1 class="hero-title">Seamus</h1>
+    <p class="hero-subtitle">Your AI kitchen companion. Talk to an Irish chef who helps you cook, plan meals, and learn — in any language.</p>
+    <p class="hero-tagline">"Ah, come in, come in! Let's make something good together."</p>
+    <a href="https://seamus-app-production.up.railway.app" class="cta-btn">Start Cooking with Seamus</a>
+    <a href="#features" class="cta-secondary">See what Seamus can do &darr;</a>
+  </div>
+
+  <!-- Features -->
+  <section id="features">
+    <h2 class="section-title">What Seamus Does</h2>
+    <p class="section-subtitle">A personal chef in your pocket who actually talks with you — not at you.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-emoji">🗣</div>
+        <h3 class="feature-title">Voice Conversations</h3>
+        <p class="feature-desc">Talk to Seamus like a friend in the kitchen. Ask questions, get step-by-step guidance, and cook together in real time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-emoji">📅</div>
+        <h3 class="feature-title">Meal Planning</h3>
+        <p class="feature-desc">Plan your week with Seamus. He remembers your preferences, suggests meals, and adds them to your calendar.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-emoji">📖</div>
+        <h3 class="feature-title">Save Recipes</h3>
+        <p class="feature-desc">Every recipe Seamus shares gets saved to your Pantry. Shopping lists too — one tap and you're ready for the store.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-emoji">🎓</div>
+        <h3 class="feature-title">Culinary Academy</h3>
+        <p class="feature-desc">Learn knife skills, sauces, spices, and more. Interactive courses with Seamus as your instructor.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-emoji">🌍</div>
+        <h3 class="feature-title">30+ Languages</h3>
+        <p class="feature-desc">Seamus speaks your language. Select it during setup and your entire experience — voice, text, and UI — adapts automatically.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-emoji">🥗</div>
+        <h3 class="feature-title">Dietary Respect</h3>
+        <p class="feature-desc">Vegan, kosher, halal, gluten-free — Seamus treats your dietary choices with the same care as allergies. Always.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section>
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">Three steps from your kitchen to a great meal.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <h3>Create your profile</h3>
+          <p>Tell Seamus your name, language, allergies, and dietary preferences. Takes 30 seconds.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <h3>Call or text Seamus</h3>
+          <p>Tap Call for a voice conversation, or Text for a quick chat. Seamus is ready either way.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <h3>Cook something great</h3>
+          <p>Seamus walks you through it — step by step, at your pace. Recipes and shopping lists save automatically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing">
+    <h2 class="section-title">Simple Pricing</h2>
+    <p class="section-subtitle">Start free. Upgrade when you're ready.</p>
+    <div class="pricing-cards">
+      <div class="price-card">
+        <h3 class="price-name">Free</h3>
+        <div class="price-amount">$0</div>
+        <div class="price-period">forever</div>
+        <ul class="price-features">
+          <li>Unlimited text conversations</li>
+          <li>5 voice calls per month</li>
+          <li>Meal plan calendar</li>
+          <li>Recipe and shopping list saving</li>
+          <li>Culinary Academy access</li>
+        </ul>
+        <a href="https://seamus-app-production.up.railway.app" class="price-cta price-cta-free">Get Started</a>
+      </div>
+      <div class="price-card featured">
+        <span class="price-badge">Most Popular</span>
+        <h3 class="price-name">Premium</h3>
+        <div class="price-amount">$9.99 <span>/mo</span></div>
+        <div class="price-period">or $89.99/year — save 25%</div>
+        <ul class="price-features">
+          <li>Everything in Free</li>
+          <li>Unlimited voice calls</li>
+          <li>Priority voice quality</li>
+          <li>All future premium features</li>
+        </ul>
+        <a href="https://seamus-app-production.up.railway.app" class="price-cta price-cta-premium">Start Free, Upgrade Anytime</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Languages -->
+  <section>
+    <div class="languages-section">
+      <h2 class="section-title">One Chef, Every Language</h2>
+      <p class="section-subtitle" style="margin-bottom: 0;">Seamus automatically speaks your language — with the same warmth and personality.</p>
+      <div class="lang-grid">
+        <span class="lang-tag">English</span>
+        <span class="lang-tag">Spanish</span>
+        <span class="lang-tag">French</span>
+        <span class="lang-tag">German</span>
+        <span class="lang-tag">Italian</span>
+        <span class="lang-tag">Portuguese</span>
+        <span class="lang-tag">Japanese</span>
+        <span class="lang-tag">Korean</span>
+        <span class="lang-tag">Mandarin</span>
+        <span class="lang-tag">Hindi</span>
+        <span class="lang-tag">Arabic</span>
+        <span class="lang-tag">Turkish</span>
+        <span class="lang-tag">Dutch</span>
+        <span class="lang-tag">Polish</span>
+        <span class="lang-tag">Vietnamese</span>
+        <span class="lang-tag">Thai</span>
+        <span class="lang-tag">and many more...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <div class="bottom-cta">
+    <h2 class="section-title">Ready to Cook?</h2>
+    <p>Seamus is warming up the kitchen. Come on in.</p>
+    <a href="https://seamus-app-production.up.railway.app" class="cta-btn">Start Cooking with Seamus</a>
+    <div class="store-buttons">
+      <a href="#" class="store-btn">
+        <span class="store-btn-icon">🍎</span>
+        App Store — Coming Soon
+      </a>
+      <a href="#" class="store-btn">
+        <span class="store-btn-icon">▶️</span>
+        Google Play — Coming Soon
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <a href="https://seamus-app-production.up.railway.app/terms">Terms of Service</a>
+      <a href="https://seamus-app-production.up.railway.app/privacy">Privacy Policy</a>
+      <a href="https://seamus-app-production.up.railway.app/disclaimer">Food Disclaimer</a>
+      <a href="mailto:synergyautomations79@gmail.com">Contact</a>
+    </div>
+    <p class="footer-company">&copy; 2026 Synergy Automations. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
