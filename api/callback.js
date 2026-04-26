@@ -51,27 +51,70 @@ export default async function handler(req, res) {
 
 function sendResult(res, status, content) {
   // Decap's expected handshake:
-  //   1. Popup sends "authorizing:github" to opener
-  //   2. Opener echoes a message back (any origin)
-  //   3. Popup posts the final "authorization:github:<status>:<JSON>" reply
+  //   1. Popup repeatedly sends "authorizing:github" to opener
+  //   2. Opener (admin page) echoes the same message back
+  //   3. On the echo, popup posts "authorization:github:<status>:<JSON>" and closes
   const payload = JSON.stringify(content).replace(/</g, '\\u003c');
+  const finalMessage = `authorization:github:${status}:${payload}`;
 
   const html = `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" /><title>Authorizing…</title></head>
-<body>
-  <p style="font-family: system-ui, sans-serif; padding: 24px;">Authorizing with GitHub… you can close this window.</p>
+<body style="font-family: system-ui, -apple-system, sans-serif; padding: 32px; max-width: 520px; margin: 0 auto; color: #3E2C20;">
+  <h2 id="status-title" style="margin: 0 0 8px;">Authorizing with GitHub…</h2>
+  <p id="status-detail" style="margin: 0; color: #8A7A68;">This window should close automatically in a moment.</p>
   <script>
     (function () {
-      function receiveMessage(e) {
-        window.opener.postMessage(
-          'authorization:github:${status}:${payload}',
-          e.origin
-        );
-        window.removeEventListener('message', receiveMessage, false);
+      var finalMessage = ${JSON.stringify(finalMessage)};
+      var titleEl = document.getElementById('status-title');
+      var detailEl = document.getElementById('status-detail');
+
+      if (!window.opener) {
+        titleEl.textContent = 'Lost connection to the admin window.';
+        detailEl.textContent = 'Close this tab, return to /admin/, and click "Login with GitHub" again. (This usually means the original tab was closed or refreshed.)';
+        return;
       }
+
+      var done = false;
+
+      function receiveMessage(e) {
+        // Decap echoes "authorizing:github" back. On any reply, send the token.
+        if (done) return;
+        done = true;
+        clearInterval(handshakeInterval);
+        clearTimeout(timeoutHandle);
+        try {
+          window.opener.postMessage(finalMessage, e.origin || '*');
+          titleEl.textContent = 'Authorized.';
+          detailEl.textContent = 'You can close this window.';
+        } catch (err) {
+          titleEl.textContent = 'Could not deliver the token.';
+          detailEl.textContent = err.message;
+        }
+        window.removeEventListener('message', receiveMessage, false);
+        setTimeout(function () { try { window.close(); } catch (_) {} }, 600);
+      }
+
       window.addEventListener('message', receiveMessage, false);
-      window.opener.postMessage('authorizing:github', '*');
+
+      // Re-broadcast every 250ms until the admin page acknowledges. This
+      // covers the race where the popup loads before Decap's listener
+      // is fully attached, or where the browser delivered the popup as
+      // a tab (in which case the first send may be ignored).
+      var handshakeInterval = setInterval(function () {
+        if (done) return;
+        try {
+          window.opener.postMessage('authorizing:github', '*');
+        } catch (_) {}
+      }, 250);
+
+      // After 30s give up and tell the user what to do.
+      var timeoutHandle = setTimeout(function () {
+        if (done) return;
+        clearInterval(handshakeInterval);
+        titleEl.textContent = 'Authorization timed out.';
+        detailEl.textContent = 'Make sure the /admin/ tab is still open in another tab, then close this window and click "Login with GitHub" again.';
+      }, 30000);
     })();
   </script>
 </body>
