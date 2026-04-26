@@ -1,0 +1,47 @@
+backend:
+  name: github
+  repo: jrbragg1979-hub/cookwithseamus
+  branch: master
+  base_url: https://cookwithseamus.com
+  auth_endpoint: api/auth
+
+# Editorial workflow gives you Drafts → In Review → Ready columns
+# so you and your mom can review each other's posts before publishing.
+publish_mode: editorial_workflow
+
+# Where uploaded images are stored in the repo, and what URL path
+# the markdown frontmatter should reference.
+media_folder: "public/blog"
+public_folder: "/blog"
+
+site_url: https://cookwithseamus.com
+display_url: https://cookwithseamus.com
+logo_url: https://cookwithseamus.com/logo.png
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    label_singular: "Post"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}} — {{pubDate | date('YYYY-MM-DD')}}"
+    sortable_fields: ["pubDate", "title"]
+    view_filters:
+      - label: "Drafts"
+        field: draft
+        pattern: true
+      - label: "Published"
+        field: draft
+        pattern: false
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string", hint: "One-line tagline shown on the blog index card and as the page meta description." }
+      - { label: "Publish Date", name: "pubDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Author", name: "author", widget: "string", default: "Seamus", required: false, hint: "Defaults to Seamus. Set to your name or your mom's when you write." }
+      - { label: "Hero Emoji", name: "heroEmoji", widget: "string", required: false, hint: "Optional. A single emoji shown as the post's icon when there's no hero image." }
+      - { label: "Hero Image", name: "heroImage", widget: "image", required: false, hint: "Optional. Banner image at the top of the post. Takes priority over the emoji." }
+      - { label: "Hero Image Alt Text", name: "heroImageAlt", widget: "string", required: false, hint: "Brief description for screen readers — e.g. 'A skillet with golden fond.'" }
+      - { label: "Hero Image Credit", name: "heroImageCredit", widget: "string", required: false, hint: "e.g. 'Photo by Jane Doe on Pexels'" }
+      - { label: "Hide from public site (draft)", name: "draft", widget: "boolean", default: false, required: false, hint: "Tick this to keep the post out of the live blog while you're still working on it." }
+      - { label: "Body", name: "body", widget: "markdown", hint: "The post itself. The toolbar handles headings, bold, lists, links, and images." }
