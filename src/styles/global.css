@@ -1,0 +1,24 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #FAF6F1;
+  --cream: #FFFDF9;
+  --dark-wood: #3E2C20;
+  --wood: #6B4F3A;
+  --copper: #B87333;
+  --gold: #c89d4a;
+  --stone: #8B8178;
+  --muted: #8A7A68;
+  --border: #E8E0D5;
+  --linen: #F0EBE3;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: var(--bg);
+  color: var(--dark-wood);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }

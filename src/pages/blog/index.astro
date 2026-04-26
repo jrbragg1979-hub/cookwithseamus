@@ -1,0 +1,173 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+<Layout
+  title="Blog — Seamus"
+  description="Cooking stories, recipes, and notes from the kitchen."
+>
+  <header class="blog-header">
+    <a href="/" class="back-link">&larr; Back to Seamus</a>
+    <h1>The Seamus Blog</h1>
+    <p>Cooking stories, recipes, and notes from the kitchen.</p>
+  </header>
+
+  <main class="blog-list">
+    {posts.map((post) => (
+      <a href={`/blog/${post.slug}/`} class="post-card">
+        {post.data.heroImage ? (
+          <img
+            class="post-thumb"
+            src={post.data.heroImage}
+            alt={post.data.heroImageAlt ?? ''}
+            loading="lazy"
+          />
+        ) : post.data.heroEmoji ? (
+          <div class="post-emoji">{post.data.heroEmoji}</div>
+        ) : null}
+        <div class="post-meta">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </time>
+        </div>
+        <h2>{post.data.title}</h2>
+        <p>{post.data.description}</p>
+        <span class="read-more">Read &rarr;</span>
+      </a>
+    ))}
+  </main>
+
+  <footer class="blog-footer">
+    <a href="/">&larr; Back to Seamus</a>
+  </footer>
+</Layout>
+
+<style>
+  .blog-header {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px 32px;
+    text-align: center;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--copper); }
+
+  .blog-header h1 {
+    font-family: 'Eagle Lake', cursive;
+    font-size: 2.4rem;
+    color: var(--dark-wood);
+    margin-bottom: 12px;
+  }
+
+  .blog-header p {
+    color: var(--muted);
+    font-family: 'Georgia', serif;
+    font-size: 1.05rem;
+  }
+
+  .blog-list {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+    display: grid;
+    gap: 20px;
+  }
+
+  .post-card {
+    display: block;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .post-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--copper);
+    box-shadow: 0 8px 24px rgba(62, 44, 32, 0.08);
+  }
+
+  .post-emoji {
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+
+  .post-thumb {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .post-meta {
+    font-size: 0.8rem;
+    color: var(--stone);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .post-card h2 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark-wood);
+    margin-bottom: 8px;
+  }
+
+  .post-card p {
+    font-family: 'Georgia', serif;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+
+  .read-more {
+    color: var(--copper);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .blog-footer {
+    text-align: center;
+    padding: 32px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .blog-footer a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .blog-footer a:hover { color: var(--copper); }
+
+  @media (max-width: 600px) {
+    .blog-header { padding: 60px 20px 24px; }
+    .blog-header h1 { font-size: 1.9rem; }
+    .post-card { padding: 22px; }
+    .post-card h2 { font-size: 1.2rem; }
+  }
+</style>
