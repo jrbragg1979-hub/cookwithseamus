@@ -9,7 +9,10 @@ import Layout from '../layouts/Layout.astro';
     <h1 class="hero-title">Seamus</h1>
     <p class="hero-subtitle">Your AI kitchen companion. Talk to an Irish chef who helps you cook, plan meals, and learn — in any language.</p>
     <p class="hero-tagline">"Ah, come in, come in! Let's make something good together."</p>
-    <a href="https://seamus-app-production.up.railway.app" class="cta-btn">Start Cooking with Seamus</a>
+    <div class="cta-row">
+      <a href="https://seamus-app-production.up.railway.app" class="cta-btn">Start Cooking with Seamus</a>
+      <a href="/blog/" class="cta-btn cta-btn-outline">Come Visit the Blog</a>
+    </div>
     <a href="#features" class="cta-secondary">See what Seamus can do &darr;</a>
   </div>
 
@@ -269,6 +272,28 @@ import Layout from '../layouts/Layout.astro';
 
   .cta-btn:hover {
     transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(184, 115, 51, 0.45);
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cta-btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border: 2px solid var(--copper);
+    padding: 14px 32px;
+    box-shadow: none;
+  }
+
+  .cta-btn-outline:hover {
+    background: linear-gradient(135deg, var(--copper), var(--gold));
+    color: #fff;
+    border-color: transparent;
     box-shadow: 0 10px 30px rgba(184, 115, 51, 0.45);
   }
 
