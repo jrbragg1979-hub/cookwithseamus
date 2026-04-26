@@ -7,6 +7,26 @@
   <title>Cook with Seamus — Content Manager</title>
 </head>
 <body>
+  <script>
+    // When the OAuth popup writes the auth state to localStorage and
+    // broadcasts on 'decap-cms-auth', this admin tab listens and
+    // reloads so Decap re-initialises with the new user.
+    (function () {
+      window.addEventListener('storage', function (e) {
+        if (e.key === 'decap-cms-user' && e.newValue) {
+          window.location.reload();
+        }
+      });
+      try {
+        var bc = new BroadcastChannel('decap-cms-auth');
+        bc.addEventListener('message', function (event) {
+          if (event && event.data && event.data.type === 'auth') {
+            window.location.reload();
+          }
+        });
+      } catch (_) {}
+    })();
+  </script>
   <script src="https://unpkg.com/decap-cms@^3.3.3/dist/decap-cms.js"></script>
 </body>
 </html>

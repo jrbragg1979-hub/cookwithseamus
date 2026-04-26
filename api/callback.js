@@ -1,120 +1,144 @@
 // Step 2 of the GitHub OAuth flow.
 // GitHub redirects the user here with a temporary `code`. We exchange
-// it for an access token, then send the token back to the Decap admin
-// window via postMessage and close the popup.
+// it for an access token, fetch the user profile, then hand the auth
+// state to Decap via three parallel channels (localStorage, BroadcastChannel,
+// postMessage) — because GitHub's Cross-Origin-Opener-Policy header
+// severs window.opener.postMessage when the popup leaves and returns.
 
 export default async function handler(req, res) {
   const clientId = process.env.GITHUB_OAUTH_CLIENT_ID;
   const clientSecret = process.env.GITHUB_OAUTH_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
-    res.status(500).send(
-      'GitHub OAuth is not configured. Set GITHUB_OAUTH_CLIENT_ID and GITHUB_OAUTH_CLIENT_SECRET in Vercel env vars.'
-    );
+    sendError(res, 'GitHub OAuth is not configured. Set GITHUB_OAUTH_CLIENT_ID and GITHUB_OAUTH_CLIENT_SECRET in Vercel env vars.');
     return;
   }
 
   const code = req.query?.code;
   if (!code) {
-    res.status(400).send('Missing OAuth code from GitHub.');
+    sendError(res, 'Missing OAuth code from GitHub.');
     return;
   }
 
-  let tokenResponse;
+  let tokenData;
   try {
-    tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        code,
-      }),
+      body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, code }),
     });
+    tokenData = await tokenResponse.json();
   } catch (err) {
-    res.status(502).send(`Could not reach GitHub: ${err.message}`);
+    sendError(res, `Could not reach GitHub: ${err.message}`);
     return;
   }
 
-  const data = await tokenResponse.json();
-
-  if (data.error || !data.access_token) {
-    sendResult(res, 'error', { message: data.error_description || data.error || 'No token received' });
+  if (tokenData.error || !tokenData.access_token) {
+    sendError(res, tokenData.error_description || tokenData.error || 'No token received from GitHub.');
     return;
   }
 
-  sendResult(res, 'success', { token: data.access_token, provider: 'github' });
+  // Fetch the user profile so Decap has a complete login record.
+  let profile = {};
+  try {
+    const profileRes = await fetch('https://api.github.com/user', {
+      headers: {
+        Authorization: `token ${tokenData.access_token}`,
+        Accept: 'application/vnd.github+json',
+        'User-Agent': 'cookwithseamus-cms',
+      },
+    });
+    profile = await profileRes.json();
+  } catch (_) {
+    // Token works without profile, just less metadata for the UI.
+  }
+
+  const decapUser = {
+    backendName: 'github',
+    token: tokenData.access_token,
+    login: profile.login || 'user',
+    name: profile.name || profile.login || 'GitHub User',
+    avatar_url: profile.avatar_url || '',
+  };
+
+  sendSuccess(res, decapUser);
 }
 
-function sendResult(res, status, content) {
-  // Decap's expected handshake:
-  //   1. Popup repeatedly sends "authorizing:github" to opener
-  //   2. Opener (admin page) echoes the same message back
-  //   3. On the echo, popup posts "authorization:github:<status>:<JSON>" and closes
-  const payload = JSON.stringify(content).replace(/</g, '\\u003c');
-  const finalMessage = `authorization:github:${status}:${payload}`;
+function sendSuccess(res, user) {
+  const userJson = JSON.stringify(user).replace(/</g, '\\u003c');
+  const legacyMessage = `authorization:github:success:${JSON.stringify({
+    token: user.token,
+    provider: 'github',
+  }).replace(/</g, '\\u003c')}`;
 
   const html = `<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8" /><title>Authorizing…</title></head>
-<body style="font-family: system-ui, -apple-system, sans-serif; padding: 32px; max-width: 520px; margin: 0 auto; color: #3E2C20;">
-  <h2 id="status-title" style="margin: 0 0 8px;">Authorizing with GitHub…</h2>
-  <p id="status-detail" style="margin: 0; color: #8A7A68;">This window should close automatically in a moment.</p>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logging you in…</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #FAF6F1; color: #3E2C20; padding: 48px 24px; max-width: 520px; margin: 0 auto; text-align: center; }
+    h2 { font-family: Georgia, serif; margin: 0 0 12px; }
+    p { color: #8A7A68; margin: 0 0 28px; line-height: 1.6; }
+    .btn { display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #B87333, #c89d4a); color: white; text-decoration: none; font-weight: 700; border-radius: 12px; box-shadow: 0 6px 20px rgba(184,115,51,0.35); transition: transform 0.2s; }
+    .btn:hover { transform: translateY(-1px); }
+  </style>
+</head>
+<body>
+  <h2 id="status-title">Logging you in…</h2>
+  <p id="status-detail">One moment.</p>
+  <a href="/admin/" class="btn" id="continue-btn" style="display:none;">Continue to admin</a>
   <script>
     (function () {
-      var finalMessage = ${JSON.stringify(finalMessage)};
+      var user = ${userJson};
+      var legacyMessage = ${JSON.stringify(legacyMessage)};
       var titleEl = document.getElementById('status-title');
       var detailEl = document.getElementById('status-detail');
+      var btnEl = document.getElementById('continue-btn');
 
-      if (!window.opener) {
-        titleEl.textContent = 'Lost connection to the admin window.';
-        detailEl.textContent = 'Close this tab, return to /admin/, and click "Login with GitHub" again. (This usually means the original tab was closed or refreshed.)';
-        return;
-      }
+      // (1) Persist auth to localStorage. Decap reads this on /admin/ load.
+      try {
+        localStorage.setItem('decap-cms-user', JSON.stringify(user));
+        localStorage.setItem('netlify-cms-user', JSON.stringify(user));
+      } catch (_) {}
 
-      var done = false;
+      // (2) Broadcast to other same-origin tabs (e.g. the original /admin/ tab).
+      // BroadcastChannel works even when window.opener has been severed
+      // by GitHub's Cross-Origin-Opener-Policy header.
+      try {
+        var bc = new BroadcastChannel('decap-cms-auth');
+        bc.postMessage({ type: 'auth', user: user });
+        bc.close();
+      } catch (_) {}
 
-      function receiveMessage(e) {
-        // Decap echoes "authorizing:github" back. On any reply, send the token.
-        if (done) return;
-        done = true;
-        clearInterval(handshakeInterval);
-        clearTimeout(timeoutHandle);
-        try {
-          window.opener.postMessage(finalMessage, e.origin || '*');
-          titleEl.textContent = 'Authorized.';
-          detailEl.textContent = 'You can close this window.';
-        } catch (err) {
-          titleEl.textContent = 'Could not deliver the token.';
-          detailEl.textContent = err.message;
+      // (3) Legacy postMessage handshake — works when COOP didn't sever opener.
+      if (window.opener) {
+        var sent = false;
+        function receiveMessage(e) {
+          if (sent) return;
+          sent = true;
+          try { window.opener.postMessage(legacyMessage, e.origin || '*'); } catch (_) {}
+          window.removeEventListener('message', receiveMessage, false);
         }
-        window.removeEventListener('message', receiveMessage, false);
-        setTimeout(function () { try { window.close(); } catch (_) {} }, 600);
+        window.addEventListener('message', receiveMessage, false);
+
+        var pings = 0;
+        var pingInterval = setInterval(function () {
+          if (sent || pings++ > 20) { clearInterval(pingInterval); return; }
+          try { window.opener.postMessage('authorizing:github', '*'); } catch (_) {}
+        }, 250);
       }
 
-      window.addEventListener('message', receiveMessage, false);
-
-      // Re-broadcast every 250ms until the admin page acknowledges. This
-      // covers the race where the popup loads before Decap's listener
-      // is fully attached, or where the browser delivered the popup as
-      // a tab (in which case the first send may be ignored).
-      var handshakeInterval = setInterval(function () {
-        if (done) return;
-        try {
-          window.opener.postMessage('authorizing:github', '*');
-        } catch (_) {}
-      }, 250);
-
-      // After 30s give up and tell the user what to do.
-      var timeoutHandle = setTimeout(function () {
-        if (done) return;
-        clearInterval(handshakeInterval);
-        titleEl.textContent = 'Authorization timed out.';
-        detailEl.textContent = 'Make sure the /admin/ tab is still open in another tab, then close this window and click "Login with GitHub" again.';
-      }, 30000);
+      // After ~1.5s, surface the success state and a fallback button.
+      setTimeout(function () {
+        titleEl.textContent = 'Logged in.';
+        detailEl.textContent = 'If your original admin tab is still open it has refreshed automatically. Otherwise, click below to continue.';
+        btnEl.style.display = 'inline-block';
+      }, 1500);
     })();
   </script>
 </body>
@@ -122,4 +146,19 @@ function sendResult(res, status, content) {
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.status(200).send(html);
+}
+
+function sendError(res, message) {
+  const safe = String(message).replace(/[<&>]/g, (c) => ({ '<': '&lt;', '&': '&amp;', '>': '&gt;' }[c]));
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /><title>Authorization error</title></head>
+<body style="font-family: system-ui, sans-serif; padding: 32px; max-width: 520px; margin: 0 auto; color: #3E2C20;">
+  <h2>Couldn't log in</h2>
+  <p style="color:#8A7A68;">${safe}</p>
+  <p><a href="/admin/" style="color:#B87333;">Back to admin</a></p>
+</body>
+</html>`;
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.status(400).send(html);
 }
