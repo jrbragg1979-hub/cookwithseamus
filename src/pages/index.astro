@@ -619,12 +619,23 @@ import Layout from '../layouts/Layout.astro';
     transition: all 0.2s;
   }
 
-  .store-btn:hover {
+   .store-btn:hover {
     background: #2a1c14;
     transform: translateY(-1px);
   }
 
+  .store-btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .store-btn-disabled:hover {
+    background: var(--dark-wood);
+    transform: none;
+  }
+
   .store-btn-icon { font-size: 1.4rem; }
+
 
   footer {
     text-align: center;
