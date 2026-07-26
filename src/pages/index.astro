@@ -1,184 +1,61 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import RecipeSearch from '../components/RecipeSearch.jsx';
 ---
 <Layout title="Seamus — Your AI Kitchen Companion">
 
   <!-- Hero -->
   <div class="hero">
-    <img src="/logo.png" alt="Seamus" class="hero-logo" />
-    <h1 class="hero-title">Seamus</h1>
-    <p class="hero-subtitle">Your AI kitchen companion. Talk to an Irish chef who helps you cook, plan meals, and learn — in any language.</p>
-    <p class="hero-tagline">"Ah, come in, come in! Let's make something good together."</p>
-        <div class="cta-row">
-      <a href="https://play.google.com/store/apps/details?id=com.synergyautomations.seamus" class="cta-btn">Get it on Google Play</a>
-      <a href="/blog/" class="cta-btn cta-btn-outline">Come Visit the Blog</a>
-    </div>
-    <a href="https://seamus-app-production.up.railway.app" class="cta-secondary">App Store coming soon — try the web version now &rarr;</a>
+    <img src="/Seamus_Logo_Dark.png" alt="Seamus" class="hero-brand-mark" />
+    <h1 class="hero-tagline-main">Seamus has an answer for everything</h1>
 
+    <RecipeSearch client:load />
+
+    <p class="hero-free-note">Free forever — no sign-up needed to try</p>
   </div>
 
   <!-- Features -->
   <section id="features">
     <h2 class="section-title">What Seamus Does</h2>
-    <p class="section-subtitle">A personal chef in your pocket who actually talks with you — not at you.</p>
+    <p class="section-subtitle">A personalized recipe generator, a cookbook that grows with you, and a voice chef when you want one — all rolled into your pocket.</p>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-emoji">🗣</div>
-        <h3 class="feature-title">Voice Conversations</h3>
-        <p class="feature-desc">Talk to Seamus like a friend in the kitchen. Ask questions, get step-by-step guidance, and cook together in real time.</p>
+        <div class="feature-emoji">🔍</div>
+        <h3 class="feature-title">Recipe Search</h3>
+        <p class="feature-desc">Type anything you want to cook — a specific dish, a vague craving, or a single ingredient from your fridge. Seamus writes you a personalized recipe in five seconds. Vague requests get quick clarifying questions ("dessert or drink?"), then you're set.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-emoji">📖</div>
+        <h3 class="feature-title">Save & Organize</h3>
+        <p class="feature-desc">Every recipe you keep becomes a page in your Memories cookbook. Shopping lists auto-generate from the ingredients — one tap and you're ready for the store. Come back weeks later and it's all still there.</p>
       </div>
       <div class="feature-card">
         <div class="feature-emoji">📅</div>
         <h3 class="feature-title">Meal Planning</h3>
-        <p class="feature-desc">Plan your week with Seamus. He remembers your preferences, suggests meals, and adds them to your calendar.</p>
+        <p class="feature-desc">Plan your week with Seamus. Drop recipes into your calendar, get an auto-combined shopping list for everything you need, and free up your Sunday-night "what are we eating this week" scramble.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-emoji">📖</div>
-        <h3 class="feature-title">Save Recipes</h3>
-        <p class="feature-desc">Every recipe Seamus shares gets saved to your Pantry. Shopping lists too — one tap and you're ready for the store.</p>
+        <div class="feature-emoji">🗣</div>
+        <h3 class="feature-title">Talk to Seamus</h3>
+        <p class="feature-desc">When typing isn't enough — call Seamus for hands-free help while you cook. Ask "what does 'fold in the flour' mean?" mid-recipe. Get walked through techniques as you go. Warm Irish voice, always patient, never rushes you.</p>
       </div>
       <div class="feature-card">
         <div class="feature-emoji">🎓</div>
         <h3 class="feature-title">Culinary Academy</h3>
-        <p class="feature-desc">Learn knife skills, sauces, spices, and more. Interactive courses with Seamus as your instructor.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-emoji">🌍</div>
-        <h3 class="feature-title">30+ Languages</h3>
-        <p class="feature-desc">Seamus speaks your language. Select it during setup and your entire experience — voice, text, and UI — adapts automatically.</p>
+        <p class="feature-desc">Learn knife skills, sauces, techniques, and more through interactive lessons. Master the pinch grip, learn why brown butter tastes better, discover which knife does what — all at your own pace.</p>
       </div>
       <div class="feature-card">
         <div class="feature-emoji">🥗</div>
-        <h3 class="feature-title">Dietary Respect</h3>
-        <p class="feature-desc">Vegan, kosher, halal, gluten-free — Seamus treats your dietary choices with the same care as allergies. Always.</p>
+        <h3 class="feature-title">Dietary Care & 30+ Languages</h3>
+        <p class="feature-desc">Vegan, kosher, halal, gluten-free, allergic to shellfish — set your preferences once and Seamus honors them absolutely. And he speaks your language — Spanish, French, Japanese, Hindi, Arabic, 25 more. Set it once, works everywhere.</p>
       </div>
     </div>
   </section>
 
-  <!-- How It Works -->
-  <section>
-    <h2 class="section-title">How It Works</h2>
-    <p class="section-subtitle">Three steps from your kitchen to a great meal.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-text">
-          <h3>Create your profile</h3>
-          <p>Tell Seamus your name, language, allergies, and dietary preferences. Takes 30 seconds.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-text">
-          <h3>Call or text Seamus</h3>
-          <p>Tap Call for a voice conversation, or Text for a quick chat. Seamus is ready either way.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-text">
-          <h3>Cook something great</h3>
-          <p>Seamus walks you through it — step by step, at your pace. Recipes and shopping lists save automatically.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing">
-    <h2 class="section-title">Simple Pricing</h2>
-    <p class="section-subtitle">Start free. Upgrade when you're ready.</p>
-    <div class="pricing-cards">
-      <div class="price-card">
-        <h3 class="price-name">Free</h3>
-        <div class="price-amount">$0</div>
-        <div class="price-period">forever</div>
-        <ul class="price-features">
-          <li>Unlimited text conversations</li>
-          <li>5 voice calls per month</li>
-          <li>Meal plan calendar</li>
-          <li>Recipe and shopping list saving</li>
-          <li>Culinary Academy access</li>
-        </ul>
-        <a href="https://seamus-app-production.up.railway.app" class="price-cta price-cta-free">Get Started</a>
-      </div>
-      <div class="price-card featured">
-        <span class="price-badge">Most Popular</span>
-        <h3 class="price-name">Premium</h3>
-        <div class="price-amount">$9.99 <span>/mo</span></div>
-        <div class="price-period">or $89.99/year — save 25%</div>
-        <ul class="price-features">
-          <li>Everything in Free</li>
-          <li>Unlimited voice calls</li>
-          <li>Priority voice quality</li>
-          <li>All future premium features</li>
-        </ul>
-        <a href="https://seamus-app-production.up.railway.app" class="price-cta price-cta-premium">Start Free, Upgrade Anytime</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Languages -->
-  <section>
-    <div class="languages-section">
-      <h2 class="section-title">One Chef, Every Language</h2>
-      <p class="section-subtitle" style="margin-bottom: 0;">Seamus automatically speaks your language — with the same warmth and personality.</p>
-      <div class="lang-grid">
-        <span class="lang-tag">English</span>
-        <span class="lang-tag">Spanish</span>
-        <span class="lang-tag">French</span>
-        <span class="lang-tag">German</span>
-        <span class="lang-tag">Italian</span>
-        <span class="lang-tag">Portuguese</span>
-        <span class="lang-tag">Japanese</span>
-        <span class="lang-tag">Korean</span>
-        <span class="lang-tag">Mandarin</span>
-        <span class="lang-tag">Hindi</span>
-        <span class="lang-tag">Arabic</span>
-        <span class="lang-tag">Turkish</span>
-        <span class="lang-tag">Dutch</span>
-        <span class="lang-tag">Polish</span>
-        <span class="lang-tag">Vietnamese</span>
-        <span class="lang-tag">Thai</span>
-        <span class="lang-tag">and many more...</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Install -->
-  <section>
-    <div class="languages-section">
-      <h2 class="section-title">Add Seamus to Your Home Screen</h2>
-      <p class="section-subtitle" style="margin-bottom: 24px;">Use Seamus like a native app — no app store needed. It takes 10 seconds.</p>
-      <div class="install-steps">
-        <div class="install-step">
-          <span class="install-icon">📱</span>
-          <div>
-            <strong>iPhone</strong>
-            <p>Open in Safari → tap Share (□↑) → "Add to Home Screen"</p>
-          </div>
-        </div>
-        <div class="install-step">
-          <span class="install-icon">🤖</span>
-          <div>
-            <strong>Android</strong>
-            <p>Open in Chrome → tap "Install" when prompted</p>
-          </div>
-        </div>
-        <div class="install-step">
-          <span class="install-icon">💻</span>
-          <div>
-            <strong>Desktop</strong>
-            <p>Look for the install icon (⬇) in your browser's address bar</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
   <!-- Bottom CTA -->
   <div class="bottom-cta">
     <h2 class="section-title">Ready to Cook?</h2>
-    <p>Get Seamus on your phone, or try the web version now.</p>
+    <p>Get Seamus on your phone for the full experience — save recipes, plan meals, and call your Irish chef when you need him.</p>
     <div class="store-buttons">
       <a href="#" class="store-btn store-btn-disabled">
         <span class="store-btn-icon">🍎</span>
@@ -189,7 +66,6 @@ import Layout from '../layouts/Layout.astro';
         Get it on Google Play
       </a>
     </div>
-    <a href="https://seamus-app-production.up.railway.app" class="cta-secondary" style="display: inline-block; margin-top: 24px; color: var(--copper);">try the web version now &rarr;</a>
   </div>
 
 
@@ -217,99 +93,38 @@ import Layout from '../layouts/Layout.astro';
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 60px 24px 40px;
+    padding: 48px 24px 60px;
     background: linear-gradient(180deg, #3E2C20 0%, #5C3D2E 40%, #6B4F3A 70%, var(--bg) 100%);
     position: relative;
   }
 
-  .hero-logo {
-    width: 140px;
-    height: 140px;
-    border-radius: 28px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-    margin-bottom: 24px;
+  .hero-brand-mark {
+    width: 176px;
+    height: 176px;
+    object-fit: cover;
+    object-position: left center;
+    border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    margin-bottom: 20px;
   }
 
-  .hero-title {
+  .hero-tagline-main {
     font-family: 'Eagle Lake', cursive;
-    font-size: 3.2rem;
+    font-size: 2.2rem;
     color: #F0EBE3;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
+    margin: 0 0 36px;
+    letter-spacing: 0.5px;
+    line-height: 1.25;
+    max-width: 620px;
   }
 
-  .hero-subtitle {
-    font-size: 1.2rem;
-    color: rgba(240, 230, 211, 0.75);
-    font-weight: 500;
-    margin-bottom: 32px;
-    max-width: 460px;
-  }
-
-  .hero-tagline {
-    font-family: 'Georgia', serif;
-    font-size: 1rem;
-    color: rgba(240, 230, 211, 0.55);
+  .hero-free-note {
+    color: rgba(240, 230, 211, 0.65);
+    font-size: 0.88rem;
     font-style: italic;
-    margin-bottom: 36px;
-    max-width: 380px;
+    margin: 24px 0 0;
+    letter-spacing: 0.3px;
   }
-
-  .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 36px;
-    background: linear-gradient(135deg, var(--copper), var(--gold));
-    color: #fff;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s;
-    box-shadow: 0 6px 20px rgba(184, 115, 51, 0.35);
-  }
-
-  .cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(184, 115, 51, 0.45);
-  }
-
-  .cta-row {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .cta-btn-outline {
-    background: transparent;
-    color: var(--gold);
-    border: 2px solid var(--copper);
-    padding: 14px 32px;
-    box-shadow: none;
-  }
-
-  .cta-btn-outline:hover {
-    background: linear-gradient(135deg, var(--copper), var(--gold));
-    color: #fff;
-    border-color: transparent;
-    box-shadow: 0 10px 30px rgba(184, 115, 51, 0.45);
-  }
-
-  .cta-secondary {
-    display: inline-block;
-    margin-top: 16px;
-    color: rgba(240, 230, 211, 0.6);
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .cta-secondary:hover { color: rgba(240, 230, 211, 0.9); }
 
   section {
     padding: 80px 24px;
