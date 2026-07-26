@@ -55,10 +55,8 @@
 .rs-pill:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .rs-pill-label {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   color: #B87333;
   flex-shrink: 0;
 }
@@ -515,5 +513,9 @@
     font-size: 0.82rem;
     padding: 8px 14px;
     max-width: none;
+  }
+  /* Chalkboard placeholder brighter on mobile so it's readable at small size */
+  .rs-chalk-input::placeholder {
+    color: rgba(240, 230, 211, 0.85);
   }
 }

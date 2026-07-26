@@ -39,15 +39,15 @@ const SEAMUS_QUIPS = [
 ];
 
 const PILLS_LEFT = [
-  { label: 'Try', text: '"a hearty vegan stew"', query: 'a hearty vegan stew' },
-  { label: 'Try', text: '"I have an eggplant and no idea what to do with it"', query: 'I have an eggplant and have no idea what to do with it' },
-  { label: 'Try', text: '"beer"', query: 'beer' },
+  { label: 'Try:', text: '"a hearty vegan stew"', query: 'a hearty vegan stew' },
+  { label: 'Try:', text: '"I have an eggplant and no idea what to do with it"', query: 'I have an eggplant and have no idea what to do with it' },
+  { label: 'Try:', text: '"beer"', query: 'beer' },
 ];
 
 const PILLS_RIGHT = [
-  { label: 'Try', text: '"chocolate chip cookies without gluten"', query: 'chocolate chip cookies without gluten' },
-  { label: 'Try', text: '"What goes well with ribs?"', query: 'What goes well with ribs?' },
-  { label: 'Try', text: '"burgers"', query: 'burgers' },
+  { label: 'Try:', text: '"chocolate chip cookies without gluten"', query: 'chocolate chip cookies without gluten' },
+  { label: 'Try:', text: '"What goes well with ribs?"', query: 'What goes well with ribs?' },
+  { label: 'Try:', text: '"burgers"', query: 'burgers' },
 ];
 
 const GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.synergyautomations.seamus';

@@ -7,7 +7,7 @@ import RecipeSearch from '../components/RecipeSearch.jsx';
   <!-- Hero -->
   <div class="hero">
     <img src="/Seamus_Logo_Dark.png" alt="Seamus" class="hero-brand-mark" />
-    <h1 class="hero-tagline-main">Seamus has an answer for everything</h1>
+    <h1 class="hero-tagline-main">Ask Seamus. Cook anything.</h1>
 
     <RecipeSearch client:load />
 
@@ -94,7 +94,7 @@ import RecipeSearch from '../components/RecipeSearch.jsx';
     justify-content: center;
     text-align: center;
     padding: 48px 24px 60px;
-    background: linear-gradient(180deg, #3E2C20 0%, #5C3D2E 40%, #6B4F3A 70%, var(--bg) 100%);
+    background: linear-gradient(180deg, #3E2C20 0%, #5C3D2E 55%, #6B4F3A 85%, var(--bg) 100%);
     position: relative;
   }
 
@@ -475,12 +475,15 @@ import RecipeSearch from '../components/RecipeSearch.jsx';
   }
 
   @media (max-width: 600px) {
-    .hero-title { font-size: 2.4rem; }
-    .hero-subtitle { font-size: 1rem; }
-    .hero-logo { width: 110px; height: 110px; }
+    .hero-tagline-main {
+      font-size: 1.5rem;
+      margin: 0 0 24px;
+      max-width: 100%;
+    }
+    .hero-brand-mark { width: 132px; height: 132px; }
+    .hero-free-note { font-size: 0.82rem; }
     section { padding: 60px 20px; }
     .section-title { font-size: 1.5rem; }
     .features-grid { grid-template-columns: 1fr; }
-    .pricing-cards { grid-template-columns: 1fr; }
   }
 </style>
