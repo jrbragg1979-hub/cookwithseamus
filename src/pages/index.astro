@@ -57,15 +57,28 @@ import RecipeSearch from '../components/RecipeSearch.jsx';
     <h2 class="section-title">Ready to Cook?</h2>
     <p>Get Seamus on your phone for the full experience — save recipes, plan meals, and call your Irish chef when you need him.</p>
     <div class="store-buttons">
-      <a href="#" class="store-btn store-btn-disabled">
-        <span class="store-btn-icon">🍎</span>
-        App Store — Coming Soon
-      </a>
-      <a href="https://play.google.com/store/apps/details?id=com.synergyautomations.seamus" class="store-btn">
-        <span class="store-btn-icon">▶️</span>
-        Get it on Google Play
+      <a
+        href="https://play.google.com/store/apps/details?id=com.synergyautomations.seamus"
+        class="store-badge"
+      >
+        <img src="/badge-googleplay-en.svg" alt="Get it on Google Play" width="238" height="71" />
       </a>
     </div>
+    <p class="store-note">Coming soon to the App Store</p>
+
+    <!--
+      When Apple approves the iOS build, replace the <p class="store-note"> above
+      with this, placed BEFORE the Google Play link — Apple requires their badge
+      to come first when another platform's badge is present:
+
+      <a href="APP_STORE_URL" class="store-badge">
+        <img src="/badge-appstore-en.svg" alt="Download on the App Store" width="240" height="80" />
+      </a>
+
+      The artwork is already in public/. Do not use Apple's badge until the app
+      is actually downloadable — a badge that links nowhere is worse than a
+      plain line of text.
+    -->
   </div>
 
 
@@ -420,36 +433,34 @@ import RecipeSearch from '../components/RecipeSearch.jsx';
     margin-top: 24px;
   }
 
-  .store-btn {
+  /* Official store artwork only — both Apple and Google prohibit recreating
+     their badges, which the previous emoji-and-text buttons did. The badge
+     itself must not be restyled, recoloured or distorted, so the link is a
+     bare wrapper and only the whole thing lifts on hover.
+     Apple: https://toolbox.marketingtools.apple.com/app-store/
+     Google: https://partnermarketinghub.withgoogle.com/brands/google-play/ */
+  .store-badge {
     display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
-    background: var(--dark-wood);
-    color: var(--linen);
-    border-radius: 12px;
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.2s;
+    transition: transform 0.2s;
   }
 
-   .store-btn:hover {
-    background: #2a1c14;
+  .store-badge:hover {
     transform: translateY(-1px);
   }
 
-  .store-btn-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  .store-badge img {
+    height: 56px;
+    width: auto;
+    display: block;
   }
 
-  .store-btn-disabled:hover {
-    background: var(--dark-wood);
-    transform: none;
+  .store-note {
+    text-align: center;
+    margin-top: 14px;
+    color: var(--stone);
+    font-size: 0.9rem;
   }
-
-  .store-btn-icon { font-size: 1.4rem; }
 
 
   footer {
