@@ -1,0 +1,185 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const SUPPORT_EMAIL = 'synergyautomations79@gmail.com';
+
+// App routes live on the Railway-hosted app, not on this marketing site.
+const APP = 'https://seamus-app-production.up.railway.app';
+
+const faqs = [
+  {
+    q: 'How do I delete my account?',
+    a: `In the app, go to Study → Account → Delete Account. This permanently removes your account and all associated data. Full details are on the account deletion page.`,
+    href: `${APP}/delete-account`,
+    hrefLabel: 'Account deletion details',
+  },
+  {
+    q: 'Seamus can’t hear me during a call.',
+    a: 'Microphone access is switched off for the app. On iPhone, open Settings, find Cook with Seamus, and turn on Microphone. On Android, open Settings → Apps → Seamus → Permissions → Microphone. You can still chat with Seamus by text in the meantime.',
+  },
+  {
+    q: 'I never received my confirmation email.',
+    a: 'Check your spam folder first, as confirmation emails are sometimes filtered. If it still hasn’t arrived after a few minutes, email us and we’ll confirm your account manually.',
+  },
+  {
+    q: 'Do I need an account to use Seamus?',
+    a: 'No. Recipe Search works without signing up — choose "Try Recipe Search" on the welcome screen. An account is only needed for features that save your work: saved recipes, voice calls, meal plans, shopping lists and memories.',
+  },
+  {
+    q: 'How long can a voice call last?',
+    a: 'Up to 20 minutes per call. If a call ends sooner than expected, it’s usually a network interruption — starting a new call picks up where you left off, since Seamus remembers your recent conversations.',
+  },
+  {
+    q: 'Is Seamus free?',
+    a: 'Yes. Seamus is free to download and use on iPhone and Android.',
+  },
+  {
+    q: 'Something else is wrong.',
+    a: 'Email us with your device model, whether you’re on iPhone, Android or the web, and what you were doing when it went wrong. That detail is usually enough for us to reproduce the problem straight away.',
+  },
+];
+---
+
+<Layout
+  title="Support — Cook with Seamus"
+  description="Get help with Cook with Seamus. Contact support, find answers to common questions, and learn how to manage or delete your account."
+>
+  <main class="support">
+    <a class="back" href="/">&larr; Back to Cook with Seamus</a>
+
+    <header class="support-head">
+      <h1>Support</h1>
+      <p class="lede">
+        Something not working, or a question we haven&rsquo;t answered? Write to us and a
+        real person will reply — usually within two business days.
+      </p>
+      <a class="mail" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+    </header>
+
+    <section class="faq">
+      <h2>Common questions</h2>
+      <dl>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <dt>{f.q}</dt>
+            <dd>
+              {f.a}
+              {f.href && (
+                <>
+                  {' '}<a href={f.href}>{f.hrefLabel}</a>.
+                </>
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section class="legal-links">
+      <h2>Policies</h2>
+      <div class="links">
+        <a href={`${APP}/terms`}>Terms of Service</a>
+        <a href={`${APP}/privacy`}>Privacy Policy</a>
+        <a href={`${APP}/disclaimer`}>Food Disclaimer</a>
+        <a href={`${APP}/delete-account`}>Delete Your Account</a>
+      </div>
+    </section>
+
+    <footer class="support-foot">
+      <p>Cook with Seamus is made by Synergy Automations.</p>
+      <p>&copy; 2026 Synergy Automations. All rights reserved.</p>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .support {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+
+  .back {
+    display: inline-block;
+    color: var(--stone);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+  }
+
+  .back:hover { color: var(--copper); }
+
+  .support-head { border-bottom: 1px solid var(--border); padding-bottom: 32px; }
+
+  h1 {
+    font-family: 'Eagle Lake', cursive;
+    font-size: 2.2rem;
+    margin: 0 0 16px;
+  }
+
+  .lede {
+    font-size: 1.05rem;
+    margin: 0 0 20px;
+    max-width: 34rem;
+  }
+
+  .mail {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--copper);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    word-break: break-all;
+  }
+
+  h2 {
+    font-family: 'Eagle Lake', cursive;
+    font-size: 1.3rem;
+    margin: 40px 0 8px;
+  }
+
+  dl { margin: 0; }
+
+  .faq-item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  dt {
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--stone);
+  }
+
+  dd a { color: var(--copper); }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 12px;
+  }
+
+  .links a {
+    color: var(--copper);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .links a:hover { text-decoration: underline; }
+
+  .support-foot {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--stone);
+    font-size: 0.85rem;
+  }
+
+  .support-foot p { margin: 0 0 4px; }
+</style>
