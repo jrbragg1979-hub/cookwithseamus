@@ -1,0 +1,126 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// The QR-code destination for print — business cards, stickers, anything that
+// cannot be edited once it exists.
+//
+// This page is the whole reason the QR does not point straight at a store. A QR
+// code holds ONE static URL and cannot branch, so encoding an App Store link
+// would send every Android scanner to the wrong place, permanently. Encoding a
+// third-party shortener would rent out the most permanent asset we own — if
+// that service folds, every card already handed out becomes dead paper.
+//
+// Pointing at our own domain means the destination stays editable forever. A
+// new platform, a regional store, a campaign page: same cards, new behaviour.
+//
+// The site is static (no Astro adapter), so the branch happens client-side.
+// That is fine here — QR scanners hand off to a real browser. It does mean the
+// markup below must stand on its own for anyone who arrives with JavaScript
+// off, which is why the badges are real links rather than a spinner.
+
+const APP_STORE = 'https://apps.apple.com/app/id6768838460';
+const GOOGLE_PLAY =
+  'https://play.google.com/store/apps/details?id=com.synergyautomations.seamus';
+---
+
+<Layout
+  title="Get Cook with Seamus"
+  description="Download Cook with Seamus for iPhone or Android — your AI Irish chef for recipes, meal plans and voice cooking guidance."
+>
+  <main class="get">
+    <img class="mark" src="/logo.png" alt="" width="96" height="96" />
+    <h1>Cook with Seamus</h1>
+    <p class="lede">Your Irish chef, in your pocket. Free to try, no sign-up needed.</p>
+
+    <div class="store-buttons">
+      <!-- Apple's badge comes first when another platform's badge is present,
+           and must be the black variant. Official artwork, never restyled. -->
+      <a href={APP_STORE} class="store-badge">
+        <img src="/badge-appstore-en.svg" alt="Download on the App Store" width="240" height="80" />
+      </a>
+      <a href={GOOGLE_PLAY} class="store-badge">
+        <img src="/badge-googleplay-en.svg" alt="Get it on Google Play" width="238" height="71" />
+      </a>
+    </div>
+
+    <p class="fallback">Taking you to your app store…</p>
+    <p class="home"><a href="/">Or visit cookwithseamus.com</a></p>
+  </main>
+</Layout>
+
+<script is:inline define:vars={{ APP_STORE, GOOGLE_PLAY }}>
+  (function () {
+    var ua = navigator.userAgent || '';
+
+    // iPadOS 13+ reports itself as a Mac, so the touch check is what separates
+    // a real desktop from an iPad. Without it, iPad scans fall through to the
+    // both-badges view.
+    var iPadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+    var iOS = /iPad|iPhone|iPod/.test(ua) || iPadOS;
+    var android = /Android/.test(ua);
+
+    if (!iOS && !android) {
+      // Desktop, or something we do not recognise. Leave the badges up rather
+      // than guessing — a wrong redirect is worse than one extra tap.
+      document.querySelector('.fallback').hidden = true;
+      return;
+    }
+
+    // replace() rather than assign() so the back button returns to whatever
+    // the scanner came from, not to this page, which would bounce them
+    // straight back to the store.
+    window.location.replace(iOS ? APP_STORE : GOOGLE_PLAY);
+  })();
+</script>
+
+<style>
+  .get {
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 64px 24px;
+    text-align: center;
+  }
+
+  .mark {
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Eagle Lake', cursive;
+    font-size: 1.9rem;
+    margin: 0 0 12px;
+  }
+
+  .lede {
+    color: var(--stone);
+    margin: 0 0 32px;
+  }
+
+  .store-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .store-badge img {
+    height: 60px;
+    width: auto;
+  }
+
+  .fallback {
+    margin-top: 28px;
+    color: var(--stone);
+    font-size: 0.9rem;
+  }
+
+  .home {
+    margin-top: 8px;
+    font-size: 0.9rem;
+  }
+
+  .home a {
+    color: var(--copper);
+  }
+</style>
