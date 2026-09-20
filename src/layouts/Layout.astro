@@ -12,6 +12,14 @@ const {
   description = 'Meet Seamus, your personal AI chef. Get real-time cooking guidance, recipes, meal planning, and culinary education — all by voice, in 30+ languages.',
   ogImage = '/logo.png',
 } = Astro.props;
+
+// Open Graph requires ABSOLUTE urls. A bare "/logo.png" happens to work —
+// Facebook and Apple both resolve it against the page — but that is scraper
+// leniency, not the spec, and not every platform is lenient. Astro.site is
+// already set in astro.config.mjs, so resolving costs nothing and stops this
+// depending on someone else's goodwill.
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -23,10 +31,23 @@ const {
   <meta name="theme-color" content="#3E2C20" />
   <link rel="icon" type="image/png" href="/logo.png" />
 
+  <link rel="canonical" href={canonical} />
+
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={ogImage} />
+  <meta property="og:image" content={ogImageUrl} />
+  <meta property="og:url" content={canonical} />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Cook with Seamus" />
+
+  {/* X shows no preview at all without these — there were none before. "summary"
+      rather than "summary_large_image" because the default share image is the
+      1024x1024 logo, and the large card wants 2:1 and would crop it badly.
+      Swap to summary_large_image once a proper 1200x630 card exists. */}
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImageUrl} />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
