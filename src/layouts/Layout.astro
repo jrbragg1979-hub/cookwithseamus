@@ -10,7 +10,7 @@ interface Props {
 const {
   title,
   description = 'Meet Seamus, your personal AI chef. Get real-time cooking guidance, recipes, meal planning, and culinary education — all by voice, in 30+ languages.',
-  ogImage = '/logo.png',
+  ogImage = '/og-image.png',
 } = Astro.props;
 
 // Open Graph requires ABSOLUTE urls. A bare "/logo.png" happens to work —
@@ -40,11 +40,11 @@ const ogImageUrl = new URL(ogImage, Astro.site);
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Cook with Seamus" />
 
-  {/* X shows no preview at all without these — there were none before. "summary"
-      rather than "summary_large_image" because the default share image is the
-      1024x1024 logo, and the large card wants 2:1 and would crop it badly.
-      Swap to summary_large_image once a proper 1200x630 card exists. */}
-  <meta name="twitter:card" content="summary" />
+  {/* X showed no preview at all before these. summary_large_image now that
+      og-image.png is a proper 1200x630 card — rendered from the Remotion
+      project so it uses the same brown, the same Eagle Lake and the same
+      winking logo the videos close on. */}
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImageUrl} />
